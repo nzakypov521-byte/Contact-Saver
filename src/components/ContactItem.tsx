@@ -6,7 +6,7 @@ function ContactItem({ contact }: { contact: Contact }) {
   const removeContact = useContactStore((state) => state.deleteContact);
   return (
     <div className="flex">
-      <NavLink to='/' className="hover:cursor-pointer w-full flex flex-row border border-black rounded-2xl p-2 gap-3 justify-between">
+      <NavLink to={`/${contact.id}`} className="hover:cursor-pointer w-full flex flex-row border border-black rounded-2xl p-2 gap-3 justify-between">
         <div className="flex flex-row gap-3">
           <div>{contact.name}</div>
           <div>{contact.surname}</div>

@@ -3,13 +3,14 @@ import { Route, Routes } from "react-router-dom";
 
 import MainPage from "./pages/MainPage";
 import AddContactPage from "./pages/AddContactPage";
+import EditContact from "./pages/EditContact";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<MainPage />} />
       <Route path="/addContact" element={<AddContactPage />} />
-      Ro
+      <Route path="/:id" element={<EditContact/>}/>
     </Routes>
   );
 }

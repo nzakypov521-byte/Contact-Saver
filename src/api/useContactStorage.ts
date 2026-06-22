@@ -5,6 +5,8 @@ interface ContactState {
     contacts: Contact[],
     addContact: (contact: Contact) => void,
     deleteContact: (id: string) => void,
+    getContact: (id: string) => Contact | undefined,
+    editContact: (cont: Contact) => void
 }
 
 const getLocalStorageData = (): Contact[] => {
@@ -12,7 +14,7 @@ const getLocalStorageData = (): Contact[] => {
     return saved ? JSON.parse(saved) : []
 }
 
-export const useContactStore = create<ContactState>((set) => ({
+export const useContactStore = create<ContactState>((set, get) => ({
     contacts: getLocalStorageData(),
     addContact: (newContact) => set((state) => {
         const updatedContacts = [...state.contacts, newContact]
@@ -23,6 +25,16 @@ export const useContactStore = create<ContactState>((set) => ({
         const updatedContacts = state.contacts.filter((c) => c.id !== id)
         localStorage.setItem('contacts-storage', JSON.stringify(updatedContacts))
         return {contacts: updatedContacts}
+    }),
+    getContact: (id:string) => {
+        return get().contacts.find((c) => c.id === id)
+    },
+    editContact: (newdata: Contact) => set((state) => {
+        const updatedContacts = state.contacts.map((contact) => contact.id === newdata.id ? {...contact, ...newdata} : contact)
+
+        localStorage.setItem('contact-storage',JSON.stringify(updatedContacts))
+
+        return { contacts: updatedContacts}
     })
     
 }))
