@@ -10,7 +10,7 @@ function App() {
     <Routes>
       <Route path="/" element={<MainPage />} />
       <Route path="/addContact" element={<AddContactPage />} />
-      <Route path="/:id" element={<EditContact/>}/>
+      <Route path="/editContact/:id" element={<EditContact/>}/>
     </Routes>
   );
 }
