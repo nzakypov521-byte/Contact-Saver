@@ -11,7 +11,10 @@ function ContactItem({ contact }: { contact: Contact }) {
           <div>{contact.name}</div>
           <div>{contact.surname}</div>
         </div>
-        <button className="hover:cursor-pointer hover:text-red-500" onClick={() => {removeContact(contact.id)}}>Удалить</button>
+        <button className="hover:cursor-pointer hover:text-red-500" onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          removeContact(contact.id)}}>Удалить</button>
       </NavLink>
     </div>
   );
