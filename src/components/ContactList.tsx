@@ -13,5 +13,4 @@ function ContactList() {
     </div>
   );
 }
-
 export default ContactList;

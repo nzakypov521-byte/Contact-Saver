@@ -5,8 +5,15 @@ import MainPage from "./pages/MainPage";
 import AddContactPage from "./pages/AddContactPage";
 import EditContact from "./pages/EditContactPage";
 import Header from "./components/Header";
+import { useContactStore } from "./api/useContactStorage";
+import { useEffect } from "react";
 
 function App() {
+  const fetchContacts = useContactStore((state) => state.fetchContacts)
+  useEffect(() => {
+    fetchContacts()
+  },[fetchContacts])
+
   return (
     <>
       <header>
