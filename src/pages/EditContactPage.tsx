@@ -5,9 +5,9 @@ function EditContact() {
     const { id } = useParams()
 
     return (
-        <div>
+        <>
             <EditForm id={String(id)}></EditForm>
-        </div>
+        </>
     )
 }
 
