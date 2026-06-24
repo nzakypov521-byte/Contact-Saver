@@ -2,7 +2,7 @@ import { useState, type ChangeEvent, type FormEvent } from "react";
 import type { Contact, InpDataType } from "../types/types";
 
 interface Props {
-  onSubmit?: (cont: Contact) => void;
+  onSubmit: (cont: Contact) => void;
   existingContInfo?: InpDataType;
   isEdit?: boolean;
 }
@@ -31,7 +31,7 @@ function ContactForm({onSubmit, existingContInfo = initialState, isEdit=false }:
     e.preventDefault()
 
     onSubmit({
-        id: isEdit ? contact.id : crypto.randomUUID(),
+        id: isEdit ? (contact.id ?? crypto.randomUUID()) : crypto.randomUUID(),
         name: contact.name,
         surname: contact.surname,
         phone: contact.phone,

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 
 function EditContact() {
     const { id } = useParams()
-    const contact = useContactStore((state) => state.getContact(id))
+    const contact = useContactStore((state) => state.getContact(String(id)))
     const editContact = useContactStore((state) => state.editContact)
 
     return (
