@@ -8,7 +8,7 @@ function EditContact() {
     return (
         <div>
             <Header></Header>
-            <EditForm id={id}></EditForm>
+            <EditForm id={String(id)}></EditForm>
         </div>
     )
 }

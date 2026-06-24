@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useContactStore } from "../api/useContactStorage";
+
 function EditForm({ id }: { id: string}) {
     const contact = useContactStore((state) => state.getContact(id))
     const editContact = useContactStore((state) => state.editContact)
@@ -26,21 +27,21 @@ function EditForm({ id }: { id: string}) {
         onSubmit={handleEdit}
         className="flex flex-col gap-10 shadow-xl w-150 p-5 border border-[#c9c3c357] rounded-2xl items-center"
       >
-        <span className="w-full text-start px-3 mb-[-25px]">Имя</span>
+        <span className="w-full text-start px-3 -mb-6.25">Имя</span>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="w-full bg-[#d4d4d450] rounded-xl outline-0 text-sm px-4 py-1"
           type="text"
         />
-        <span className="w-full text-start px-3 mb-[-25px]">Фамилия</span>
+        <span className="w-full text-start px-3 -mb-6.25">Фамилия</span>
         <input
           value={surname}
           onChange={(e) => setSurname(e.target.value)}
           className="w-full bg-[#d4d4d450] rounded-xl outline-0 text-sm px-4 py-1"
           type="text"
         />
-        <span className="w-full text-start px-3 mb-[-25px]">Номер Телефона</span>
+        <span className="w-full text-start px-3 -mb-6.25">Номер Телефона</span>
         <input
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
