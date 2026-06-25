@@ -10,10 +10,10 @@ interface ContactState {
   addContact: (contact: Contact) => Promise<void>;
   deleteContact: (id: string) => Promise<void>;
   getContact: (id: string) => Promise<Contact>;
-  editContact: (cont: Contact) => void;
+  editContact: (cont: Contact) => Promise<void>;
 }
 
-export const useContactStore = create<ContactState>((set, get) => ({
+export const useContactStore = create<ContactState>((set) => ({
   contacts: [],
   fetchContacts: async () => {
     try {
@@ -40,13 +40,16 @@ export const useContactStore = create<ContactState>((set, get) => ({
         method: "POST",
         body: JSON.stringify(newContact),
       });
-      if (res.ok) {
-        set((state) => {
-          const updatedContacts = [...state.contacts, newContact];
-          return { contacts: updatedContacts };
-        });
-        window.location.href = '/'
-      }
+
+      if (!res.ok) throw new Error("Ошибка при добавлении");
+
+      const data = await res.json()
+      const generatedId = data.name
+
+      set((state) => ({ 
+        contacts: [...state.contacts, { ...newContact, id: generatedId }] 
+      }))
+
     } catch (e) {
       console.error(e);
     }
@@ -72,24 +75,25 @@ export const useContactStore = create<ContactState>((set, get) => ({
     const res = await fetch(`${baseURL}/contacts/${id}.json`)
     const contact = await res.json()
     if (!contact) throw new Error(`Contact with id ${id} not found`);
-    return contact;
+    return { ...contact, id: id};
   },
 
   editContact: async (newdata: Contact) => {
-    set((state) => {
-      const updatedContacts = state.contacts.map((contact) =>
-        contact.id === newdata.id ? { ...contact, ...newdata } : contact
-      );
-
-      return { contacts: updatedContacts };
-    });
     try {
-      const updatedContacts = get().contacts;
-      const res = await fetch(`${baseURL}/contacts.json`, {
-        method: "PUT",
-        body: JSON.stringify(updatedContacts),
+      const { id, ...bodyData} = newdata
+      const res = await fetch(`${baseURL}/contacts/${id}.json`, {
+        method: "PATCH",
+        body: JSON.stringify(bodyData),
       });
-      if (res.ok) alert("GOOD");
+      if (res.ok) {
+        set((state) => {
+          const updatedContacts = state.contacts.map((contact) =>
+            contact.id === newdata.id ? { ...contact, ...newdata } : contact
+          );
+    
+          return { contacts: updatedContacts };
+        });
+      }
     } catch (e) {
       console.error(e);
     }
