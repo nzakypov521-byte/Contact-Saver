@@ -40,7 +40,6 @@ function ContactForm({
     });
 
     if (!isEdit) setContact(initialState);
-    if (isEdit) alert("DATA SAVED");
   }
 
   return (

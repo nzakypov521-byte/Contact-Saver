@@ -6,6 +6,9 @@ import AddContactPage from "./pages/AddContactPage";
 import EditContact from "./pages/EditContactPage";
 import Header from "./components/Header";
 
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 function App() {
   return (
     <>
@@ -19,6 +22,7 @@ function App() {
           <Route path="/editContact/:id" element={<EditContact />} />
         </Routes>
       </main>
+      <ToastContainer/>
     </>
   );
 }
