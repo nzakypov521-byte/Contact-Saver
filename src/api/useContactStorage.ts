@@ -9,7 +9,7 @@ interface ContactState {
   fetchContacts: () => Promise<void>;
   addContact: (contact: Contact) => Promise<void>;
   deleteContact: (id: string) => Promise<void>;
-  getContact: (id: string) => Contact;
+  getContact: (id: string) => Promise<Contact>;
   editContact: (cont: Contact) => void;
 }
 
@@ -21,51 +21,56 @@ export const useContactStore = create<ContactState>((set, get) => ({
       if (!res.ok) throw new Error("Ошибка загрузки");
 
       const data = await res.json();
-      const loadedContacts = data 
-        ? (Array.isArray(data) ? data : Object.values(data)) 
-        : [];
+      const contacts = Object.keys(data).map((key) => {
+        return {
+          ...data[key],
+          id: key
+        }
+      })
 
-      set({ contacts: loadedContacts });
+
+      set({ contacts: contacts });
     } catch (e) {
       console.error("Не удалось загрузить контакты с сервера:", e);
     }
   },
   addContact: async (newContact) => {
-    set((state) => {
-      const updatedContacts = [...state.contacts, newContact];
-      return { contacts: updatedContacts };
-    });
     try {
-      const currentContacts = get().contacts;
       const res = await fetch(`${baseURL}/contacts.json`, {
-        method: "PUT",
-        body: JSON.stringify(currentContacts),
+        method: "POST",
+        body: JSON.stringify(newContact),
       });
-      if (res.ok) alert("GOOD");
+      if (res.ok) {
+        set((state) => {
+          const updatedContacts = [...state.contacts, newContact];
+          return { contacts: updatedContacts };
+        });
+        window.location.href = '/'
+      }
     } catch (e) {
       console.error(e);
     }
   },
 
   deleteContact: async (id: string) => {
-    set((state) => {
-      const updatedContacts = state.contacts.filter((c) => c.id !== id);
-      return { contacts: updatedContacts };
-    });
     try {
-      const updatedContacts = get().contacts;
-      const res = await fetch(`${baseURL}/contacts.json`, {
-        method: "PUT",
-        body: JSON.stringify(updatedContacts),
+      const res = await fetch(`${baseURL}/contacts/${id}.json`, {
+        method: "DELETE"
       });
-      if (res.ok) alert("GOOD");
+      if (res.ok) {
+        set((state) => {
+          const updatedContacts = state.contacts.filter((c) => c.id !== id);
+          return { contacts: updatedContacts };
+        });
+      }
     } catch (e) {
       console.error(e);
     }
   },
 
-  getContact: (id: string): Contact => {
-    const contact = get().contacts.find((c) => c.id === id);
+  getContact: async (id: string): Promise<Contact> => {
+    const res = await fetch(`${baseURL}/contacts/${id}.json`)
+    const contact = await res.json()
     if (!contact) throw new Error(`Contact with id ${id} not found`);
     return contact;
   },

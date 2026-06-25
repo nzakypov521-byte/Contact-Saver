@@ -14,7 +14,7 @@ function ContactItem({ contact }: { contact: Contact }) {
         <button className="hover:cursor-pointer hover:text-red-500" onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()
-          removeContact(contact.id)}}>Удалить</button>
+          removeContact(contact?.id)}}>Удалить</button>
       </NavLink>
     </div>
   );
