@@ -1,11 +1,15 @@
 import { create } from "zustand";
 import type { Contact } from "../types/types";
+import makeRequest from "../utils/makeRequest.ts";
+import type { IdFromPOSTFetch} from "../types/types";
+import type { DataFromGETFetch } from "../types/types";
 
 const baseURL =
   "https://contactsaver-4c25a-default-rtdb.europe-west1.firebasedatabase.app";
 
 interface ContactState {
-  contacts: Contact[];
+  contacts: Contact[]
+  currentContact: Contact | null
   fetchContacts: () => Promise<void>;
   addContact: (contact: Contact) => Promise<void>;
   deleteContact: (id: string) => Promise<void>;
@@ -15,12 +19,10 @@ interface ContactState {
 
 export const useContactStore = create<ContactState>((set) => ({
   contacts: [],
+  currentContact: null,
   fetchContacts: async () => {
     try {
-      const res = await fetch(`${baseURL}/contacts.json`);
-      if (!res.ok) throw new Error("Ошибка загрузки");
-
-      const data = await res.json();
+      const data = await makeRequest<DataFromGETFetch>(`${baseURL}/contacts.json`, 'GET')
       const contacts = Object.keys(data).map((key) => {
         return {
           ...data[key],
@@ -36,14 +38,8 @@ export const useContactStore = create<ContactState>((set) => ({
   },
   addContact: async (newContact) => {
     try {
-      const res = await fetch(`${baseURL}/contacts.json`, {
-        method: "POST",
-        body: JSON.stringify(newContact),
-      });
 
-      if (!res.ok) throw new Error("Ошибка при добавлении");
-
-      const data = await res.json()
+      const data = await makeRequest<IdFromPOSTFetch>(baseURL + '/contacts.json', 'POST', newContact)
       const generatedId = data.name
 
       set((state) => ({ 
@@ -72,9 +68,8 @@ export const useContactStore = create<ContactState>((set) => ({
   },
 
   getContact: async (id: string): Promise<Contact> => {
-    const res = await fetch(`${baseURL}/contacts/${id}.json`)
-    const contact = await res.json()
-    if (!contact) throw new Error(`Contact with id ${id} not found`);
+    const contact = await makeRequest<Contact>(`${baseURL}/contacts/${id}.json`, 'GET')
+    set(() => ({ currentContact: contact }))
     return { ...contact, id: id};
   },
 

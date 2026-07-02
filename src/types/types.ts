@@ -5,3 +5,9 @@ export interface Contact {
     phone: string,
     image?: string
 }
+
+export interface IdFromPOSTFetch {
+    name: string,
+}
+
+export type DataFromGETFetch = Record<string, Contact>

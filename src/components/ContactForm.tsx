@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useState, type ChangeEvent, type SubmitEvent } from "react";
 import type { Contact } from "../types/types";
 
 interface Props {
@@ -29,7 +29,7 @@ function ContactForm({
     }));
   }
 
-  function handleSubmit(e: FormEvent) {
+  function handleSubmit(e: SubmitEvent) {
     e.preventDefault();
 
     onSubmit({

@@ -11,14 +11,12 @@ function AddContactPage() {
 
     function addContactFunction(cont: Contact) {
         addContact(cont)
-        toast.success('КОНТАКТ ДОБАВЛЕН')
+        toast.success('КОНТАКТ ДОБАВЛЕН') 
         navigate('/')
     }
 
     return (
-        <>
             <ContactForm onSubmit={addContactFunction}/>
-        </>
     )
 }
 

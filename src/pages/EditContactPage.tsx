@@ -29,14 +29,12 @@ function EditContact() {
   }
 
   return (
-    <>
       <ContactForm
         key={id}
         isEdit
         onSubmit={onEdit}
         existingContInfo={contact ?? undefined}
       />
-    </>
   );
 }
 
